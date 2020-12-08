@@ -56,13 +56,20 @@ function getJSON(obj) {
  *
  */
 function fromJSON(proto, json) {
-  const obj = JSON.parse(json);
+  const instance = JSON.parse(json);
 
-  Object.keys(proto).forEach((key) => {
-    obj[key] = proto[key];
-  });
+  const keys = Object.keys(instance);
+  const values = Object.values(instance);
 
-  return obj;
+  function SpecialObj(...args) {
+    Array.from(args).forEach((key, index) => {
+      this[keys[index]] = key;
+    });
+  }
+
+  SpecialObj.prototype = proto;
+
+  return new SpecialObj(...values);
 }
 
 
