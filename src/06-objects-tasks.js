@@ -197,7 +197,7 @@ MySuperBaseElementSelector.prototype.checkOrder = function checkOrder(number) {
   }
 };
 
-MySuperBaseElementSelector.prototype.stringify = function stringify() {
+MySuperBaseElementSelector.prototype.stringify = function stringif() {
   const result = this.arr.join('');
   return result;
 };
