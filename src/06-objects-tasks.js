@@ -132,7 +132,7 @@ function MySuperBaseElementSelector() {
   this.order = [];
 }
 
-MySuperBaseElementSelector.prototype.element = function (value) {
+MySuperBaseElementSelector.prototype.element = function element(value) {
   if (this.hasElement) {
     throw new Error('Element, id and pseudo-element should not occur more then one time inside the selector');
   }
@@ -143,7 +143,7 @@ MySuperBaseElementSelector.prototype.element = function (value) {
   return this;
 };
 
-MySuperBaseElementSelector.prototype.id = function (value) {
+MySuperBaseElementSelector.prototype.id = function id(value) {
   if (this.hasId) {
     throw new Error('Element, id and pseudo-element should not occur more then one time inside the selector');
   }
@@ -154,28 +154,28 @@ MySuperBaseElementSelector.prototype.id = function (value) {
   return this;
 };
 
-MySuperBaseElementSelector.prototype.class = function (value) {
+MySuperBaseElementSelector.prototype.class = function class1(value) {
   this.arr.push(`.${value}`);
   this.checkOrder(3);
   this.order.push(3);
   return this;
 };
 
-MySuperBaseElementSelector.prototype.attr = function (value) {
+MySuperBaseElementSelector.prototype.attr = function attr(value) {
   this.arr.push(`[${value}]`);
   this.checkOrder(4);
   this.order.push(4);
   return this;
 };
 
-MySuperBaseElementSelector.prototype.pseudoClass = function (value) {
+MySuperBaseElementSelector.prototype.pseudoClass = function pseudoClass(value) {
   this.arr.push(`:${value}`);
   this.checkOrder(5);
   this.order.push(5);
   return this;
 };
 
-MySuperBaseElementSelector.prototype.pseudoElement = function (value) {
+MySuperBaseElementSelector.prototype.pseudoElement = function pseudoElement(value) {
   if (this.hasPseudoElement) {
     throw new Error('Element, id and pseudo-element should not occur more then one time inside the selector');
   }
@@ -186,18 +186,18 @@ MySuperBaseElementSelector.prototype.pseudoElement = function (value) {
   return this;
 };
 
-MySuperBaseElementSelector.prototype.combine = function (selector1, combinator, selector2) {
+MySuperBaseElementSelector.prototype.combine = function combine(selector1, combinator, selector2) {
   this.arr = [selector1.stringify(), ` ${combinator} `, selector2.stringify()];
   return this;
 };
 
-MySuperBaseElementSelector.prototype.checkOrder = function (number) {
+MySuperBaseElementSelector.prototype.checkOrder = function checkOrder(number) {
   if (this.order.slice(-1) && this.order.slice(-1) > number) {
     throw new Error('Selector parts should be arranged in the following order: element, id, class, attribute, pseudo-class, pseudo-element');
   }
 };
 
-MySuperBaseElementSelector.prototype.stringify = function () {
+MySuperBaseElementSelector.prototype.stringify = function stringify() {
   const result = this.arr.join('');
   return result;
 };
