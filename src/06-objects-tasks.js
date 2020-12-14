@@ -127,34 +127,131 @@ function fromJSON(proto, json) {
  *  For more examples see unit tests.
  */
 
+function MySuperBaseElementSelector() {
+  this.arr = [];
+  this.order = [];
+}
+
+MySuperBaseElementSelector.prototype.element = function (value) {
+  if (this.hasElement) {
+    throw new Error('Element, id and pseudo-element should not occur more then one time inside the selector');
+  }
+  this.hasElement = true;
+  this.arr.push(`${value}`);
+  this.checkOrder(1);
+  this.order.push(1);
+  return this;
+};
+
+MySuperBaseElementSelector.prototype.id = function (value) {
+  if (this.hasId) {
+    throw new Error('Element, id and pseudo-element should not occur more then one time inside the selector');
+  }
+  this.hasId = true;
+  this.arr.push(`#${value}`);
+  this.checkOrder(2);
+  this.order.push(2);
+  return this;
+};
+
+MySuperBaseElementSelector.prototype.class = function (value) {
+  this.arr.push(`.${value}`);
+  this.checkOrder(3);
+  this.order.push(3);
+  return this;
+};
+
+MySuperBaseElementSelector.prototype.attr = function (value) {
+  this.arr.push(`[${value}]`);
+  this.checkOrder(4);
+  this.order.push(4);
+  return this;
+};
+
+MySuperBaseElementSelector.prototype.pseudoClass = function (value) {
+  this.arr.push(`:${value}`);
+  this.checkOrder(5);
+  this.order.push(5);
+  return this;
+};
+
+MySuperBaseElementSelector.prototype.pseudoElement = function (value) {
+  if (this.hasPseudoElement) {
+    throw new Error('Element, id and pseudo-element should not occur more then one time inside the selector');
+  }
+  this.hasPseudoElement = true;
+  this.arr.push(`::${value}`);
+  this.checkOrder(6);
+  this.order.push(6);
+  return this;
+};
+
+MySuperBaseElementSelector.prototype.combine = function (selector1, combinator, selector2) {
+  this.arr = [selector1.stringify(), ` ${combinator} `, selector2.stringify()];
+  return this;
+};
+
+MySuperBaseElementSelector.prototype.checkOrder = function (number) {
+  if (this.order.slice(-1) && this.order.slice(-1) > number) {
+    throw new Error('Selector parts should be arranged in the following order: element, id, class, attribute, pseudo-class, pseudo-element');
+  }
+};
+
+MySuperBaseElementSelector.prototype.stringify = function () {
+  const result = this.arr.join('');
+  return result;
+};
+
 const cssSelectorBuilder = {
-  element(/* value */) {
-    throw new Error('Not implemented');
+  element(value) {
+    const instance = new MySuperBaseElementSelector();
+    instance.element(value);
+    instance.hasElement = true;
+    return instance;
   },
 
-  id(/* value */) {
-    throw new Error('Not implemented');
+  id(value) {
+    const instance = new MySuperBaseElementSelector();
+    instance.id(value);
+    instance.hasId = true;
+    return instance;
   },
 
-  class(/* value */) {
-    throw new Error('Not implemented');
+  class(value) {
+    const instance = new MySuperBaseElementSelector();
+    instance.class(value);
+    return instance;
   },
 
-  attr(/* value */) {
-    throw new Error('Not implemented');
+  attr(value) {
+    const instance = new MySuperBaseElementSelector();
+    instance.attr(value);
+    return instance;
   },
 
-  pseudoClass(/* value */) {
-    throw new Error('Not implemented');
+  pseudoClass(value) {
+    const instance = new MySuperBaseElementSelector();
+    instance.pseudoClass(value);
+    return instance;
   },
 
-  pseudoElement(/* value */) {
-    throw new Error('Not implemented');
+  pseudoElement(value) {
+    const instance = new MySuperBaseElementSelector();
+    instance.pseudoElement(value);
+    instance.hasPseudoElement = true;
+    return instance;
   },
 
-  combine(/* selector1, combinator, selector2 */) {
-    throw new Error('Not implemented');
+  combine(selector1, combinator, selector2) {
+    const instance = new MySuperBaseElementSelector();
+    instance.combine(selector1, combinator, selector2);
+    return instance;
   },
+
+  // stringify() {
+  //   const result = this.instance.stringify();
+  //   return result;
+  // },
 };
 
 

@@ -110,12 +110,11 @@ function chainPromises(array, action) {
 
   const pr = new Promise((resolve) => {
     for (let i = 0; i < array.length; i += 1) {
-      array[i].then((res) => results.push(res)).catch();
+      array[i].then((res) => results.push(res));
     }
     resolve(results);
   });
-  return pr.then((res) => res.reduce(action));
-  // throw new Error();
+  return pr.then((res) => res.reduce(action)).catch((e) => e);
 }
 
 module.exports = {
